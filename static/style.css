@@ -1,0 +1,16 @@
+body {
+    background-color: rgb(120, 150, 120);
+    width: 70%;
+    margin: auto;
+    margin-top: 0;
+    color: aliceblue;
+    align-items: center;
+}
+
+table {
+    align-items: center;
+}
+td, th {
+text-align: center;
+padding: 8px;
+}

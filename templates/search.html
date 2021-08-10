@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Meal plan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="nav">
+      <a href="/">Main</a>
+      <a href="/users">Users</a>
+      <a href="/search">Search</a>
+      <a href="/nhs">NHS</a>
+    </div>
+        <h1>This is search page</h1>
+
+    <form method="POST" action="/search">
+       Search food : <input type="text" name="search_keyword">
+       <input id="submit" type="submit" value="Submit">
+    </form>
+    <h3>Your search keyword is : {{ getData }}</h3>
+
+    {% if getData == 'None': %}
+    <p>No input data</p>
+    {% endif %}
+
+    {% for i in range(0, 10) %}
+    <form method="POST" action="./search">
+      <h2><input type="checkbox" id="checkbox" name="current_food_name" value="{{ i }}"> {{ search_data["hits"][i]['recipe']['label'] }}</h2>
+      <h4>{{ search_data['hits'][i]['recipe']['ingredientLines'] }}</h4>
+    </form>
+    {% endfor %}
+
+  </body>
