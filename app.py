@@ -19,6 +19,7 @@ class Users(db.Model):
     diabetes = db.Column(db.String(100))
     allergies = db.Column(db.String(100))
     activeness = db.Column(db.Integer)
+    # Column : option for alleriges, diabety,
 
     def __init__(self, user_name, age, gender, diabetes, allergies, activeness):
         self.user_name = user_name
@@ -29,6 +30,7 @@ class Users(db.Model):
         self.activeness = activeness
 
 db.create_all()
+#  Calorie count recommandation
 
 @app.route("/")
 def hello_world():
@@ -41,7 +43,7 @@ def call_api():
     app_key = 'b09c4ad7a4f756f820de23a47aa49963'
     makeRequest: Response = requests.get('https://api.edamam.com/api/recipes/v2?type=public&q={}&app_id={}&app_key={}'.format(getData, app_id, app_key))
     search_data = makeRequest.json()
-    # https: // api.edamam.com / api / recipes / v2?type = public & q = pizza & app_id = f14b30eb & app_key = b09c4ad7a4f756f820de23a47aa49963
+    # https://api.edamam.com/api/recipes/v2?type=public&q=pizza&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963
     # return render_template("search.html", label=search_data['hits'][0]['recipe']['label'], ingredients = search_data['hits'][0]['recipe']['ingredientLines'])
     return render_template("search.html", search_data = search_data, getData=getData)
 #     if else statmement  - diabetes yes else...
@@ -61,7 +63,7 @@ def users():
         db.session.add(user_db)
         db.session.commit()
     user_data = Users.query.all()
-    return render_template("users.html", user_data = user_data)
+    return render_template("users.html", user_data=user_data)
 
 @app.route('/delete_users', methods=["POST"])
 def delete_user():

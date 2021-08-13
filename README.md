@@ -13,7 +13,7 @@ Running on http://127.0.0.1:5000/
 
     # For windows users
     $ pip install -r requirements.txt
-    $ set FLASK_APP=hello
+    $ set FLASK_APP=app
     $ flask run
 Running on http://127.0.0.1:5000/
 
