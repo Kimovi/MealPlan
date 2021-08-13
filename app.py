@@ -16,12 +16,16 @@ class Users(db.Model):
     user_name = db.Column(db.String(100))
     age = db.Column(db.Integer)
     gender = db.Column(db.String(100))
+    diabetes = db.Column(db.String(100))
+    allergies = db.Column(db.String(100))
     activeness = db.Column(db.Integer)
 
-    def __init__(self, user_name, age, gender, activeness):
+    def __init__(self, user_name, age, gender, diabetes, allergies, activeness):
         self.user_name = user_name
         self.age = age
         self.gender = gender
+        self.diabetes = diabetes
+        self.allergies = allergies
         self.activeness = activeness
 
 db.create_all()
@@ -31,7 +35,7 @@ def hello_world():
     return render_template("index.html")
 
 @app.route('/search', methods=["GET","POST"])
-def get_profile():
+def call_api():
     getData = request.form.get("search_keyword")
     app_id = 'f14b30eb'
     app_key = 'b09c4ad7a4f756f820de23a47aa49963'
@@ -40,6 +44,9 @@ def get_profile():
     # https: // api.edamam.com / api / recipes / v2?type = public & q = pizza & app_id = f14b30eb & app_key = b09c4ad7a4f756f820de23a47aa49963
     # return render_template("search.html", label=search_data['hits'][0]['recipe']['label'], ingredients = search_data['hits'][0]['recipe']['ingredientLines'])
     return render_template("search.html", search_data = search_data, getData=getData)
+#     if else statmement  - diabetes yes else...
+#  another condition for allergies yes
+# another condition for both etc...
 
 @app.route('/users', methods=["GET", "POST"])
 def users():
@@ -47,6 +54,8 @@ def users():
         user_db = Users(user_name = request.form.get("user_name"),
                         age = request.form.get("age"),
                         gender=request.form.get("gender"),
+                        diabetes=request.form.get("diabetes"),
+                        allergies=request.form.get("allergies"),
                         activeness=request.form.get("activeness")
                         )
         db.session.add(user_db)
