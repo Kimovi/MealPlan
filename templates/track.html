@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Meal plan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="nav">
+      <a href="/">Main</a>
+      <a href="/users">Users</a>
+      <a href="/search">Search</a>
+      <a href="/track">Track</a>
+      <a href="/nhs">NHS</a>
+    </div>
+    <h1>This is tracking page</h1>
+
+    <form method="POST" action="/track">
+       Select user name : <select name="selected_name" >
+                            {% for i in users_data %}
+                            <option value="{{ i }}">{{ i.user_name }}</option>
+                            {% endfor %}
+                          </select>
+       <input id="submit" type="submit" value="Submit">
+    </form>
+
+
+  </body>

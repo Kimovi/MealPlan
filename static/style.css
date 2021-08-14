@@ -7,9 +7,14 @@ body {
     align-items: center;
 }
 
+h1{
+color: green;
+}
+
 table {
     align-items: center;
 }
+
 td, th {
 text-align: center;
 padding: 8px;
