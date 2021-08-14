@@ -61,6 +61,7 @@ def call_api():
     search_keyword = request.form.get("search_keyword")
     diabetes = ''
     allergies = ''
+
     app_id = 'f14b30eb'
     app_key = 'b09c4ad7a4f756f820de23a47aa49963'
 
@@ -92,6 +93,7 @@ def call_api():
                            user_data=user_data
                            )
 
+    return render_template("search.html", search_data = search_data, getData=getData)
 
 
 @app.route('/users', methods=["GET", "POST"])
