@@ -8,25 +8,42 @@
       <a href="/">Main</a>
       <a href="/users">Users</a>
       <a href="/search">Search</a>
+      <a href="/track">Track</a>
       <a href="/nhs">NHS</a>
     </div>
         <h1>This is search page</h1>
 
     <form method="POST" action="/search">
+       Select user name :
+      <select name="user_name" >
+                      {% for i in user_data %}
+                      <option value="{{ i.user_name }}">{{ i.user_name }}</option>
+                      {% endfor %}
+                    </select>
        Search food : <input type="text" name="search_keyword">
        <input id="submit" type="submit" value="Submit">
     </form>
-    <h3>Your search keyword is : {{ getData }}</h3>
 
-    {% if getData == 'None': %}
-    <p>No input data</p>
+    <h3>Your search keyword is : {{ search_keyword }}</h3>
+
+    {% if search_keyword == None: %}
+        <p>Please enter your search keyword</p>
+    {% else: %}
+        {% for i in range(0, 10) %}
+        <form method="POST" action="./search">
+          <h2>
+              <input type="radio" name="selected_food" id="{{ i }}" value="{{ search_data["hits"][i]['recipe']['label'] }}">
+              {{ search_data["hits"][i]['recipe']['label'] }}
+          </h2>
+          <h4>
+              Calroies: {{ '%0.2f'| format(search_data["hits"][i]['recipe']['calories']) }} kcal
+          </h4>
+              {% for j in range(0, 40) %}
+                <p>{{ search_data['hits'][i]['recipe']['ingredientLines'][j] }}</p>
+              {% endfor %}
+        </form>
+        {% endfor %}
     {% endif %}
 
-    {% for i in range(0, 10) %}
-    <form method="POST" action="./search">
-      <h2><input type="checkbox" id="checkbox" name="current_food_name" value="{{ i }}"> {{ search_data["hits"][i]['recipe']['label'] }}</h2>
-      <h4>{{ search_data['hits'][i]['recipe']['ingredientLines'] }}</h4>
-    </form>
-    {% endfor %}
-
   </body>
+
