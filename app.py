@@ -67,22 +67,43 @@ def call_api():
 
 
 
-    # 1. Diabetes and No allergies
+    # 1. Diabetes and No allergies --> later
     # 2. Diabetes and Peanut
     # 3. Diabetes and Seafood
     # 4. Diabetes and Gluten
-    # 5. No Diabetes no allergies
+    # 5. No Diabetes no allergies --- > do this later!
 
     if selected_user:
         for user in user_data:
             if user["user_name"] == selected_user:
                 diabetes = user["diabetes"]
                 allergies = user["allergies"]
-    # print('user data from the DB: ',user_data, "\nSelected user: ", selected_user, "\nSearch keyword", search_keyword)
-    # print(diabetes, allergies)
 
-    makeRequest: Response = requests.get('https://api.edamam.com/api/recipes/v2?type=public&q={}&app_id={}&app_key={}'.format(search_keyword, app_id, app_key))
-    search_data = makeRequest.json()
+    print('user data from the DB: ',user_data, "\nSelected user: ", selected_user, "\nSearch keyword", search_keyword)
+    print(diabetes, allergies)
+
+
+    if diabetes == 'Yes' and allergies == 'Peanut-Free':
+        print('hi')
+        result = requests.get('https://api.edamam.com/api/recipes/v2?type=public&q={}&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963&diet=low-carb&health=peanut-free'.format(search_keyword))
+        search_data = result.json()
+
+    elif diabetes == 'Yes' and allergies == 'Crustacean-Free':
+        result = requests.get('https://api.edamam.com/api/recipes/v2?type=public&q={}&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963&diet=low-carb&health=crustacean-free'.format(search_keyword))
+        search_data = result.json()
+
+    elif diabetes == 'Yes' and allergies == 'Gluten-Free':
+        result = requests.get('https://api.edamam.com/api/recipes/v2?type=public&q={}&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963&diet=low-carb&health=gluten-free'.format(search_keyword))
+        search_data = result.json()
+
+    elif diabetes == 'No' and allergies == 'No-allergies':
+        result = requests.get('https://api.edamam.com/api/recipes/v2?type=public&q={}&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963'.format(search_keyword))
+        search_data = result.json()
+
+
+    # makeRequest: Response = requests.get('https://api.edamam.com/api/recipes/v2?type=public&q={}&app_id={}&app_key={}'.format(search_keyword, app_id, app_key),params=payload)
+    # search_data = makeRequest.json()
+
     # https://api.edamam.com/api/recipes/v2?type=public&q=pizza&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963
     # https://api.edamam.com/api/recipes/v2?type=public&q=pizza&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963&health=peanut-free
     # https://api.edamam.com/api/recipes/v2?type=public&q=pizza&app_id=f14b30eb&app_key=b09c4ad7a4f756f820de23a47aa49963&diet=low-carb&health=peanut-free
@@ -92,8 +113,6 @@ def call_api():
                            search_keyword=search_keyword,
                            user_data=user_data
                            )
-
-    return render_template("search.html", search_data = search_data, getData=getData)
 
 
 @app.route('/users', methods=["GET", "POST"])
