@@ -22,6 +22,20 @@
        <input id="submit" type="submit" value="Submit">
     </form>
 
-  <p>{{ food_db }}</p>
-
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Food</th>
+            <th>Calories</th>
+            <th>Date</th>
+        </tr>
+        {% for i in food_db %}
+        <tr>
+            <td>{{ i.user_name }}</td>
+            <td>{{ i.food_name }}</td>
+            <td>{{ i.calories }}</td>
+            <td>{{ i.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
   </body>

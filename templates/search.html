@@ -29,12 +29,14 @@
     {% if search_keyword == None: %}
         <p>Please enter your search keyword</p>
     {% else: %}
-        <form method="POST" action="./search">
+        <form method="POST" action="/search">
+            <input type="hidden" name="selected_user" value="{{ user_name }}">
+
              {% for i in range(0, 10) %}
                 <div>
                    <h2>
-<!--                       <input type="radio" name="selected_food" id="{{ i }}" value="{{ search_data["hits"][i]['recipe']['label'] }}">-->
-                       <input type="radio" name="selected_food" id="{{ i }}" value="{{ search_data["hits"][i] }}">
+                       <input type="radio" name="selected_food" id="{{ i }}" value="{{ search_data["hits"][i]['recipe']['label'] }}">
+                       <input type="hidden" name="calories" value="{{ '%0.2f'| format(search_data["hits"][i]['recipe']['calories']) }}">
                      {{ search_data["hits"][i]['recipe']['label'] }}
                    </h2>
                    <h4>
@@ -45,7 +47,7 @@
               {% endfor %}
            </div>
             {% endfor %}
-            <input type="date" id="start" name="date" value="2021-08-20">
+            <input type="date" name="date" value="2021-08-20">
             <input type="submit" type="submit" value="Save">
         </form>
     {% endif %}
