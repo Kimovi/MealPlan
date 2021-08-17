@@ -91,12 +91,24 @@ def call_api():
         result = requests.get('{}&q={}&app_id={}&app_key={}&diet=low-carb&health=peanut-free'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
 
-    elif diabetes == 'Yes' and allergies == 'Shellfish':
+    elif diabetes == 'Yes' and allergies == 'Crustacean':
         result = requests.get('{}&q={}&app_id={}&app_key={}&diet=low-carb&health=crustacean-free'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
 
     elif diabetes == 'Yes' and allergies == 'Gluten':
         result = requests.get('{}&q={}&app_id={}}&app_key={}&diet=low-carb&health=gluten-free'.format(api_address, search_keyword, app_id, app_key))
+        search_data = result.json()
+
+    elif diabetes == 'No' and allergies == 'Peanut':
+        result = requests.get('{}&q={}&app_id={}&app_key={}&health=peanut-free'.format(api_address, search_keyword, app_id, app_key))
+        search_data = result.json()
+
+    elif diabetes == 'No' and allergies == 'Crustacean':
+        result = requests.get('{}&q={}&app_id={}&app_key={}&health=crustacean-free'.format(api_address, search_keyword, app_id, app_key))
+        search_data = result.json()
+
+    elif diabetes == 'No' and allergies == 'Gluten':
+        result = requests.get('{}&q={}&app_id={}}&app_key={}&health=gluten-free'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
 
     elif diabetes == 'No' and allergies == 'No-allergies':
