@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Meal plan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="nav">
+      <a href="/">Main</a>
+      <a href="/users">Users</a>
+      <a href="/search">Search</a>
+      <a href="/track">Track</a>
+      <a href="/calculateBMI">BMI</a>
+    </div>
+    <h1>Calculate your BMI here!</h1>
+    <form method="POST" action="/calculateBMI">
+      Select user name :
+      <select name="user_name">
+        {% for i in user_data %}
+        <option value="{{ i.user_name }}">{{ i.user_name }}</option>
+        {% endfor %}
+      </select>
+      Enter Weight : <input type="text" name="Weight">
+      Enter Height : <input type="text" name="Height">
+
+      <input id="submit" type="submit" value="Submit">
+    </form>
+    <div class="BMI outcome"> 
+          {% if bmi == None: %}
+          <p>Almost ready to calculate your BMI... Please input Weight and Height.</p>
+          {% elif bmi < 18.5: %}
+          <p> Your BMI has been calculated. Your BMI is: {{bmi}}. Compared to the average, you are Underweight. Please seek advice <a href="https://www.nhs.uk/live-well/healthy-weight/advice-for-underweight-adults/" target="_blank"> here</a> and consider choosing meals of higher calories.</p>
+          {% elif bmi >=18.5 and bmi <= 24.9: %}
+          <p> Your BMI has been calculated. Your BMI is: {{bmi}}. You are a Normal/Healthy weight! No changes to your lifestyle need to be made. </p>
+          {% elif bmi >=25.0 and bmi <= 29.9: %}
+          <p> Your BMI has been calculated. Your BMI is: {{bmi}}. You are a Overweight. Check out this weight loss <a href="https://www.nhs.uk/live-well/healthy-weight/start-the-nhs-weight-loss-plan/" target="_blank"> plan </a> Consider choosing some meal options that have less calories.  </p>
+          {% else: %}
+          <p> Your BMI has been calculated. Your BMI is: {{bmi}}. Your BMI indicated that you are Obese. Please refer to professional help from the <a href="https://www.nhs.uk/conditions/obesity/" target="_blank"> NHS</a> </p>
+          {% endif %}
+
+    </div>
+
+  </body>
