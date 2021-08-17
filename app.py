@@ -40,11 +40,17 @@ class Food(db.Model):
         self.food_name = food_name
         self.calories = calories
 
+
 class BMI(db.Model):
     bmi_id = db.Column(db.Integer, primary_key=True)
     height = db.Column(db.Float)
     weight = db.Column(db.Float)
+    bmi = db.Column(db.Float)
 
+    def __init__(self, bmi_id, height, weight, bmi):
+        self.height = height
+        self.weight = weight
+        self.bmi = bmi
 
 db.create_all()
 
@@ -168,10 +174,16 @@ def track():
 
     return render_template("track.html", users_data=users_data, food_db=food_db)
 
+@app.route('/delete_food', methods=["GET", "POST"])
+def delete_food():
+    if request.form:
+        food_db = Food.query.filter_by(food_id=request.form.get("food_id")).first()
+        db.session.delete(food_db)
+        db.session.commit()
+        return redirect("/track")
 
 @app.route('/calculateBMI', methods=["GET", "POST"])
 def calculateBMI():
-
     users = db.session.query(Users)
     user_data = [dict(user_name=user.user_name,
                       age=user.age,
@@ -193,7 +205,6 @@ def calculate_bmi(weight, height):
 
     except ZeroDivisionError:
         print('Please enter a valid input as weight')
-
     else:
         print(f"Your BMI is {bmi}")
     return bmi

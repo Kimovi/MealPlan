@@ -35,6 +35,10 @@
             <td>{{ i.food_name }}</td>
             <td>{{ i.calories }}</td>
             <td>{{ i.date }}</td>
+            <td><form method="POST" action="/delete_food">
+                <input type="hidden" value="{{ i.food_id }}" name="food_id">
+                <input type="submit" value="Delete"></form>
+            </td>
         </tr>
         {% endfor %}
     </table>
