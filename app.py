@@ -39,8 +39,12 @@ class Food(db.Model):
     def __init__(self, food_name, calories, date, user_name):
         self.food_name = food_name
         self.calories = calories
-        self.date = date
-        self.user_name = user_name
+
+class BMI(db.Model):
+    bmi_id = db.Column(db.Integer, primary_key=True)
+    height = db.Column(db.Float)
+    weight = db.Column(db.Float)
+
 
 db.create_all()
 
@@ -165,9 +169,49 @@ def track():
     return render_template("track.html", users_data=users_data, food_db=food_db)
 
 
-@app.route('/nhs')
-def nhs():
-    return render_template("nhs.html")
+@app.route('/calculateBMI', methods=["GET", "POST"])
+def calculateBMI():
+
+    users = db.session.query(Users)
+    user_data = [dict(user_name=user.user_name,
+                      age=user.age,
+                      gender=user.gender
+                      ) for user in users]
+    weight = request.form.get("Weight")
+    height = request.form.get("Height")
+    bmi=None
+    if weight and height:
+        bmi = calculate_bmi(weight, height)
+        print(bmi)
+        print(type(bmi))
+    return render_template("calculateBMI.html", user_data=user_data, bmi=bmi)
+
+
+def calculate_bmi(weight, height):
+    try:
+        bmi = round((float(weight)) / (float(height) * float(height)),2)
+
+    except ZeroDivisionError:
+        print('Please enter a valid input as weight')
+
+    else:
+        print(f"Your BMI is {bmi}")
+    return bmi
+
+# def weight_status(weight, height):
+    # bmi = round((float(weight)) / (float(height) * float(height)), 2)
+    # if bmi < 18.5:
+    #     print('You are underweight')
+    # elif bmi >= 18.5 and <= 24.9:
+    #         print('You are healthy weight! Maintain your lifestyle.')
+    # elif bmi >= 25.0 and <= 29.9: 
+    #     print('You are overwright')
+    # else > 30.0:
+    #     print('You are obese
+
+    
+
+    
 
 
 if __name__ == '__main__':
