@@ -8,8 +8,8 @@
       <a href="/">Main</a>
       <a href="/users">Users</a>
       <a href="/search">Search</a>
-      <a href="/track">Track</a>
       <a href="/calculateBMI">BMI</a>
+      <a href="/track">Track</a>
     </div>
     <h1>Calculate your BMI here!</h1>
     <form method="POST" action="/calculateBMI">
@@ -36,7 +36,5 @@
           {% else: %}
           <p> Your BMI has been calculated. Your BMI is: {{bmi}}. Your BMI indicated that you are Obese. Please refer to professional help from the <a href="https://www.nhs.uk/conditions/obesity/" target="_blank"> NHS</a> </p>
           {% endif %}
-
     </div>
-
   </body>

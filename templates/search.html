@@ -8,8 +8,8 @@
       <a href="/">Main</a>
       <a href="/users">Users</a>
       <a href="/search">Search</a>
-      <a href="/track">Track</a>
       <a href="/calculateBMI">BMI</a>
+      <a href="/track">Track</a>
     </div>
         <h1>This is search page</h1>
 
@@ -28,6 +28,8 @@
 
     {% if search_keyword == None: %}
         <p>Please enter your search keyword</p>
+    {% elif search_data == "No data" %}
+    <h2>Sorry, there is no search result with the keyword {{ search_keyword }}</h2>
     {% else: %}
         <form method="POST" action="/search">
             <input type="hidden" name="selected_user" value="{{ user_name }}">
@@ -37,6 +39,7 @@
                    <h2>
                        <input type="radio" name="selected_food" id="{{ i }}" value="{{ search_data["hits"][i]['recipe']['label'] }}">
                        <input type="hidden" name="calories" value="{{ '%0.2f'| format(search_data["hits"][i]['recipe']['calories']) }}">
+                       <input type="hidden" name="saved_selected_user" value="{{ selected_user }}">
                      {{ search_data["hits"][i]['recipe']['label'] }}
                    </h2>
                    <h4>

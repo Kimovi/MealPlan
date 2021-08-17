@@ -1,6 +1,6 @@
 import requests
 # from requests import Response
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
@@ -9,7 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.sqlite3"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-selected_user = None
+
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(100))
@@ -39,7 +39,8 @@ class Food(db.Model):
     def __init__(self, food_name, calories, date, user_name):
         self.food_name = food_name
         self.calories = calories
-
+        self.date = date
+        self.user_name = user_name
 
 class BMI(db.Model):
     bmi_id = db.Column(db.Integer, primary_key=True)
@@ -47,7 +48,7 @@ class BMI(db.Model):
     weight = db.Column(db.Float)
     bmi = db.Column(db.Float)
 
-    def __init__(self, bmi_id, height, weight, bmi):
+    def __init__(self, height, weight, bmi):
         self.height = height
         self.weight = weight
         self.bmi = bmi
@@ -55,12 +56,11 @@ class BMI(db.Model):
 db.create_all()
 
 @app.route("/")
-def hello_world():
+def index_page():
     return render_template("index.html")
 
-
 @app.route('/search', methods=["GET","POST"])
-def call_api():
+def search_page():
     users = db.session.query(Users)
     user_data = [dict(user_id=user.user_id,
                       user_name=user.user_name,
@@ -70,7 +70,7 @@ def call_api():
                       allergies=user.allergies,
                       activeness=user.activeness
                       ) for user in users]
-    selected_user = request.form.get("user_name")
+
     search_keyword = request.form.get("search_keyword")
     diabetes = ''
     allergies = ''
@@ -78,19 +78,20 @@ def call_api():
     app_id = 'f14b30eb'
     app_key = 'b09c4ad7a4f756f820de23a47aa49963'
     selected_food = request.form.get("selected_food")
+    selected_user = request.form.get("user_name")
+    saved_selected_user = request.form.get("saved_selected_user")
     date = request.form.get("date")
     calories = request.form.get("calories")
+    search_data = None
 
+    # CHECK USER'S DIABETES/ALLERGIES OPTIONS
     if selected_user:
         for user in user_data:
             if user["user_name"] == selected_user:
                 diabetes = user["diabetes"]
                 allergies = user["allergies"]
 
-    # print('user data from the DB: ',user_data, "\nSelected user: ", selected_user, "\nSearch keyword", search_keyword)
-    # print(diabetes, allergies)
-    search_data = None
-
+    # FILTER DIABETES/ALLERGIES BY USER'S CHOICE
     if diabetes == 'Yes' and allergies == 'Peanut':
         result = requests.get('{}&q={}&app_id={}&app_key={}&diet=low-carb&health=peanut-free'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
@@ -119,24 +120,30 @@ def call_api():
         result = requests.get('{}&q={}&app_id={}&app_key={}'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
 
+    # SAVE SELECTED FOOD NAME, INFO TO FOOD DB
     if selected_food:
         food_db = Food(food_name=selected_food,
                        calories=calories,
                        date=date,
-                       user_name=selected_user
+                       user_name=saved_selected_user
                        )
         db.session.add(food_db)
         db.session.commit()
 
+    # IF API SEARCH RESULT IS LESS THAN 10, THEN RETURN 'NO DATA' TO BE RENDERED
+    if search_data !=None and search_data["count"] < 10:
+        search_data = "No data"
+
     return render_template("search.html",
                            search_data=search_data,
                            search_keyword=search_keyword,
-                           user_data=user_data
+                           user_data=user_data,
+                           selected_user=selected_user
                            )
 
 
 @app.route('/users', methods=["GET", "POST"])
-def users():
+def users_page():
     if request.form:
         user_db = Users(user_name=request.form.get("user_name"),
                         age=request.form.get("age"),
@@ -148,7 +155,7 @@ def users():
         db.session.add(user_db)
         db.session.commit()
     user_data = Users.query.all()
-    return render_template("users.html", user_data = user_data)
+    return render_template("users.html", user_data=user_data)
 
 
 @app.route('/delete_users', methods=["POST"])
@@ -161,18 +168,21 @@ def delete_user():
 
 
 @app.route('/track', methods=["GET", "POST"])
-def track():
+def track_page():
     users = db.session.query(Users)
     users_data = [dict(user_name=user.user_name, age=user.age) for user in users]
 
+    selected_user = request.form.get("selected_user_name")
+    # saved_selected_user = request.form.get("saved_selected_user")
+    print(selected_user)
     food = db.session.query(Food)
-    food_db = [dict(food_name=item.food_name,
+    food_db = [dict(food_id=item.food_id,
+                    food_name=item.food_name,
                     calories=item.calories,
                     date=item.date,
                     user_name=item.user_name
                     ) for item in food]
-
-    return render_template("track.html", users_data=users_data, food_db=food_db)
+    return render_template("track.html", users_data=users_data, food_db=food_db, get_user=selected_user)
 
 @app.route('/delete_food', methods=["GET", "POST"])
 def delete_food():
@@ -183,7 +193,7 @@ def delete_food():
         return redirect("/track")
 
 @app.route('/calculateBMI', methods=["GET", "POST"])
-def calculateBMI():
+def calculateBMI_page():
     users = db.session.query(Users)
     user_data = [dict(user_name=user.user_name,
                       age=user.age,
@@ -198,11 +208,9 @@ def calculateBMI():
         print(type(bmi))
     return render_template("calculateBMI.html", user_data=user_data, bmi=bmi)
 
-
 def calculate_bmi(weight, height):
     try:
         bmi = round((float(weight)) / (float(height) * float(height)),2)
-
     except ZeroDivisionError:
         print('Please enter a valid input as weight')
     else:
@@ -215,14 +223,10 @@ def calculate_bmi(weight, height):
     #     print('You are underweight')
     # elif bmi >= 18.5 and <= 24.9:
     #         print('You are healthy weight! Maintain your lifestyle.')
-    # elif bmi >= 25.0 and <= 29.9: 
+    # elif bmi >= 25.0 and <= 29.9:
     #     print('You are overwright')
     # else > 30.0:
     #     print('You are obese
-
-    
-
-    
 
 
 if __name__ == '__main__':

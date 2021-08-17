@@ -8,13 +8,14 @@
       <a href="/">Main</a>
       <a href="/users">Users</a>
       <a href="/search">Search</a>
-      <a href="/track">Track</a>
       <a href="/calculateBMI">BMI</a>
+      <a href="/track">Track</a>
     </div>
     <h1>This is tracking page</h1>
 
     <form method="POST" action="/track">
-       Select user name : <select name="selected_name" >
+
+       Select user name : <select name="selected_name">
                             {% for i in users_data %}
                             <option value="{{ i }}">{{ i.user_name }}</option>
                             {% endfor %}
