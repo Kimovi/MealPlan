@@ -1,5 +1,5 @@
 import requests
-from requests import Response
+# from requests import Response
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
@@ -9,7 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.sqlite3"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
+selected_user = None
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(100))
@@ -19,7 +19,6 @@ class Users(db.Model):
     allergies = db.Column(db.String(100))
     activeness = db.Column(db.Integer)
     food_data = db.Column(db.Integer, db.ForeignKey('food.food_id'))
-
 
     def __init__(self, user_name, age, gender, diabetes, allergies, activeness):
         self.user_name = user_name
@@ -33,12 +32,15 @@ class Food(db.Model):
     food_id = db.Column(db.Integer, primary_key=True)
     food_name = db.Column(db.String(200))
     calories = db.Column(db.Integer)
+    date = db.Column(db.String(50))
+    user_name = db.Column(db.String(100))
     user_id = db.relationship('Users', backref='food')
 
-    def __init__(self, food_name, calories):
+    def __init__(self, food_name, calories, date, user_name):
         self.food_name = food_name
         self.calories = calories
-
+        self.date = date
+        self.user_name = user_name
 
 db.create_all()
 
@@ -50,7 +52,8 @@ def hello_world():
 @app.route('/search', methods=["GET","POST"])
 def call_api():
     users = db.session.query(Users)
-    user_data = [dict(user_name=user.user_name,
+    user_data = [dict(user_id=user.user_id,
+                      user_name=user.user_name,
                       age=user.age,
                       gender=user.gender,
                       diabetes=user.diabetes,
@@ -65,17 +68,8 @@ def call_api():
     app_id = 'f14b30eb'
     app_key = 'b09c4ad7a4f756f820de23a47aa49963'
     selected_food = request.form.get("selected_food")
-    # if selected_food:
-        # selected_food_info = {'label': selected_food['recipe']['label'], 'calories':selected_food['recipe']['calories'] }
-        # food = json.dumps(selected_food)
-        # print(type(food))
-
     date = request.form.get("date")
-    # 1. Diabetes and No allergies --> later
-    # 2. Diabetes and Peanut
-    # 3. Diabetes and Seafood
-    # 4. Diabetes and Gluten
-    # 5. No Diabetes no allergies --- > do this later!
+    calories = request.form.get("calories")
 
     if selected_user:
         for user in user_data:
@@ -115,12 +109,14 @@ def call_api():
         result = requests.get('{}&q={}&app_id={}&app_key={}'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
 
-    #################### NEED IMPROVEMENT ON FOOD DB ####################
-    food_db = Food(food_name="pizza",
-                   calories=111)
-    db.session.add(food_db)
-    db.session.commit()
-    #################### NEED IMPROVEMENT ON FOOD DB ####################
+    if selected_food:
+        food_db = Food(food_name=selected_food,
+                       calories=calories,
+                       date=date,
+                       user_name=selected_user
+                       )
+        db.session.add(food_db)
+        db.session.commit()
 
     return render_template("search.html",
                            search_data=search_data,
@@ -161,8 +157,10 @@ def track():
 
     food = db.session.query(Food)
     food_db = [dict(food_name=item.food_name,
-                      calories = item.calories
-                      ) for item in food]
+                    calories=item.calories,
+                    date=item.date,
+                    user_name=item.user_name
+                    ) for item in food]
 
     return render_template("track.html", users_data=users_data, food_db=food_db)
 
