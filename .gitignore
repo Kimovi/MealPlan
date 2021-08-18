@@ -1,1 +1,4 @@
 __pycache__/
+users.sqlite3
+.idea
+.DS_Store
