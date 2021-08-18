@@ -2,6 +2,7 @@ import requests
 # from requests import Response
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import ast # Library to convert a string to dict format
 
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
 
@@ -101,7 +102,7 @@ def search_page():
         search_data = result.json()
 
     elif diabetes == 'Yes' and allergies == 'Gluten':
-        result = requests.get('{}&q={}&app_id={}}&app_key={}&diet=low-carb&health=gluten-free'.format(api_address, search_keyword, app_id, app_key))
+        result = requests.get('{}&q={}&app_id={}&app_key={}&diet=low-carb&health=gluten-free'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
 
     elif diabetes == 'No' and allergies == 'Peanut':
@@ -113,7 +114,7 @@ def search_page():
         search_data = result.json()
 
     elif diabetes == 'No' and allergies == 'Gluten':
-        result = requests.get('{}&q={}&app_id={}}&app_key={}&health=gluten-free'.format(api_address, search_keyword, app_id, app_key))
+        result = requests.get('{}&q={}&app_id={}&app_key={}&health=gluten-free'.format(api_address, search_keyword, app_id, app_key))
         search_data = result.json()
 
     elif diabetes == 'No' and allergies == 'No-allergies':
@@ -170,19 +171,24 @@ def delete_user():
 @app.route('/track', methods=["GET", "POST"])
 def track_page():
     users = db.session.query(Users)
-    users_data = [dict(user_name=user.user_name, age=user.age) for user in users]
+    users_data = [dict(user_name=user.user_name) for user in users]
 
-    selected_user = request.form.get("selected_user_name")
-    # saved_selected_user = request.form.get("saved_selected_user")
-    print(selected_user)
-    food = db.session.query(Food)
-    food_db = [dict(food_id=item.food_id,
-                    food_name=item.food_name,
-                    calories=item.calories,
-                    date=item.date,
-                    user_name=item.user_name
-                    ) for item in food]
-    return render_template("track.html", users_data=users_data, food_db=food_db, get_user=selected_user)
+    foods = db.session.query(Food)
+    foods_data = [dict(food_id=item.food_id,
+                       food_name=item.food_name,
+                       calories=item.calories,
+                       date=item.date,
+                       user_name=item.user_name) for item in foods]
+
+    filter_by_user = []
+    selected_user = request.form.get("selected_name")
+    if selected_user:
+        selected_name = ast.literal_eval(selected_user)
+        for item in foods_data:
+            if item["user_name"] == selected_name["user_name"]:
+                filter_by_user.append(item)
+    return render_template("track.html", users_data=users_data, food_db=filter_by_user, get_user=selected_user)
+
 
 @app.route('/delete_food', methods=["GET", "POST"])
 def delete_food():
@@ -191,6 +197,7 @@ def delete_food():
         db.session.delete(food_db)
         db.session.commit()
         return redirect("/track")
+
 
 @app.route('/calculateBMI', methods=["GET", "POST"])
 def calculateBMI_page():
@@ -207,6 +214,7 @@ def calculateBMI_page():
         print(bmi)
         print(type(bmi))
     return render_template("calculateBMI.html", user_data=user_data, bmi=bmi)
+
 
 def calculate_bmi(weight, height):
     try:
