@@ -1,15 +1,19 @@
 <html>
   <head>
     <title>Meal plan</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ style_css_mtime }}" />
   </head>
   <body>
+    <div class="track_container">
     <div class="nav">
-      <a href="/">Main</a>
-      <a href="/users">Users</a>
-      <a href="/search">Search</a>
-      <a href="/calculateBMI">BMI</a>
-      <a href="/track">Track</a>
+      <ul>
+        <li> <a href="/">Main</a> </li>
+        <li> <a href="/users">Users</a> </li>
+        <li> <a href="/search">Search</a> </li>
+        <li> <a href="/track">Track</a> </li>
+        <li> <a href="/calculateBMI">BMI</a> </li>
+      </ul>
     </div>
     <h1>This is tracking page</h1>
 
@@ -23,6 +27,7 @@
        <input id="submit" type="submit" value="Submit">
     </form>
 
+<<<<<<< Updated upstream
     <table>
         <tr>
             <th>User</th>
@@ -43,4 +48,8 @@
         </tr>
         {% endfor %}
     </table>
+=======
+  <p>{{ food_db }}</p>
+  </div>
+>>>>>>> Stashed changes
   </body>
