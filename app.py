@@ -1,8 +1,7 @@
 import requests
-# from requests import Response
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-import ast # Library to convert a string to dict format
+import ast
 
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
 
@@ -42,17 +41,6 @@ class Food(db.Model):
         self.calories = calories
         self.date = date
         self.user_name = user_name
-
-class BMI(db.Model):
-    bmi_id = db.Column(db.Integer, primary_key=True)
-    height = db.Column(db.Float)
-    weight = db.Column(db.Float)
-    bmi = db.Column(db.Float)
-
-    def __init__(self, height, weight, bmi):
-        self.height = height
-        self.weight = weight
-        self.bmi = bmi
 
 db.create_all()
 
@@ -202,13 +190,11 @@ def delete_food():
 @app.route('/calculateBMI', methods=["GET", "POST"])
 def calculateBMI_page():
     users = db.session.query(Users)
-    user_data = [dict(user_name=user.user_name,
-                      age=user.age,
-                      gender=user.gender
-                      ) for user in users]
+    user_data = [dict(user_name=user.user_name) for user in users]
     weight = request.form.get("Weight")
     height = request.form.get("Height")
     bmi=None
+
     if weight and height:
         bmi = calculate_bmi(weight, height)
         print(bmi)
@@ -224,18 +210,6 @@ def calculate_bmi(weight, height):
     else:
         print(f"Your BMI is {bmi}")
     return bmi
-
-# def weight_status(weight, height):
-    # bmi = round((float(weight)) / (float(height) * float(height)), 2)
-    # if bmi < 18.5:
-    #     print('You are underweight')
-    # elif bmi >= 18.5 and <= 24.9:
-    #         print('You are healthy weight! Maintain your lifestyle.')
-    # elif bmi >= 25.0 and <= 29.9:
-    #     print('You are overwright')
-    # else > 30.0:
-    #     print('You are obese
-
 
 if __name__ == '__main__':
     db.create_all()
