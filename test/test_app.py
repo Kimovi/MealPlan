@@ -1,5 +1,5 @@
 import unittest
-from CFGproject.app import app, db, Users, Food, calculate_bmi
+from app import app, db, Users, Food, calculate_bmi
 from flask_testing import TestCase
 from flask import url_for
 
@@ -56,7 +56,7 @@ class TestPages(TestBase):
         self.assertEqual(response.status_code, 200)
 
     def test_calculate_bmi(self, weight=75, height=1.75):
-        expected = 24.49  # --> 75/3.0625
+        expected = 24.49  # expected outcome 75/3.0625
         bmi = calculate_bmi(weight, height)
         self.assertEqual(expected, bmi)
 

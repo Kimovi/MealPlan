@@ -33,8 +33,6 @@
       </div>
     </form>
 
-    <!-- <h3>Your search keyword is : {{ search_keyword }}</h3> -->
-
     {% if search_keyword == None: %}
         <p id="food_search">Preparing your meal choices now... <i class="far fa-clock"></i> </p> 
     {% elif search_data == "No data" %}
@@ -67,7 +65,6 @@
         </form>
     {% endif %}
     </div>
-    <!-- <script src="./reminder.js"> </script> -->
     <script>
       function myFunction() {
         alert('Please scroll to end of page to save your selected meal choice!');
