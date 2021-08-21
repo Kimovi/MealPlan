@@ -17,34 +17,35 @@
         </div>
     <h1 class="bmi_title">Calculate your BMI here!</h1>
     <div class="bmi_form">
-      <form method="POST" action="/calculateBMI">
+      <form method="POST" action="/calculateBMI" class="form1">
+        <br>
         Select user name :
-        <select name="user_name">
+        <select name="user_name" class="w_h_input">
           {% for i in user_data %}
           <option value="{{ i.user_name }}">{{ i.user_name }}</option>
           {% endfor %}
         </select>
-        Enter Weight : <input type="text" name="Weight">
-        Enter Height : <input type="text" name="Height">
-
-        <input id="submit" type="submit" value="Submit">
+      <div class="w_h_input">
+        Enter Weight (KG) : <input type="text" name="Weight" required>
+        Enter Height (Meters) : <input type="text" name="Height" required>
+      </div>
+      <div class="w_h_input">
+        <input id="submit" type="submit" value="Submit" class="w_h_input">
+        </div>
       </form>
     </div>
-    <div class="BMI outcome"> 
+    <div class="BMI_outcome"> 
           {% if bmi == None: %}
-          <p>Almost ready to calculate your BMI... Please input Weight and Height.</p>
+          <p>Almost ready to calculate your BMI... Please input Weight in KG and Height in Meters.</p>
           {% elif bmi < 18.5: %}
           <p> Your BMI has been calculated. Your BMI is: {{bmi}}. Compared to the average, you are Underweight. Please seek advice <a href="https://www.nhs.uk/live-well/healthy-weight/advice-for-underweight-adults/" target="_blank"> here</a> and consider choosing meals of higher calories.</p>
           {% elif bmi >=18.5 and bmi <= 24.9: %}
-          <p> Your BMI has been calculated. Your BMI is: {{bmi}}. You are a Normal/Healthy weight! No changes to your lifestyle need to be made. </p>
+          <p> Your BMI has been calculated. Your BMI is: {{bmi}}. You are a Normal/Healthy weight! Click <a href="https://www.nhs.uk/live-well/eat-well/" target="_blank"> here</a> for further guidance on a healthy lifestyle. </p>
           {% elif bmi >=25.0 and bmi <= 29.9: %}
           <p> Your BMI has been calculated. Your BMI is: {{bmi}}. You are a Overweight. Check out this weight loss <a href="https://www.nhs.uk/live-well/healthy-weight/start-the-nhs-weight-loss-plan/" target="_blank"> plan </a> Consider choosing some meal options that have less calories.  </p>
           {% else: %}
           <p> Your BMI has been calculated. Your BMI is: {{bmi}}. Your BMI indicated that you are Obese. Please refer to professional help from the <a href="https://www.nhs.uk/conditions/obesity/" target="_blank"> NHS</a> </p>
           {% endif %}
     </div>
-<<<<<<< Updated upstream
-=======
 </div>
->>>>>>> Stashed changes
   </body>

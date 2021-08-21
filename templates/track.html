@@ -15,20 +15,23 @@
         <li> <a href="/calculateBMI">BMI</a> </li>
       </ul>
     </div>
-    <h1>This is tracking page</h1>
+    <h1 class="track_info">Keep track of your meals here!</h1>
 
-    <form method="POST" action="/track">
-
+    <form method="POST" action="/track" class="form1">
+    <div class="user_name">
        Select user name : <select name="selected_name">
                             {% for i in users_data %}
                             <option value="{{ i }}">{{ i.user_name }}</option>
                             {% endfor %}
                           </select>
+    </div>
+    <div class="search_keyword" id="track">
+    <br>
        <input id="submit" type="submit" value="Submit">
+    </div>
     </form>
 
-<<<<<<< Updated upstream
-    <table>
+    <table class="form1">
         <tr>
             <th>User</th>
             <th>Food</th>
@@ -48,8 +51,6 @@
         </tr>
         {% endfor %}
     </table>
-=======
-  <p>{{ food_db }}</p>
+  <!-- <p>{{ food_db }}</p> -->
   </div>
->>>>>>> Stashed changes
   </body>
