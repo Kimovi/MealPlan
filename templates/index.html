@@ -1,19 +1,27 @@
 <html>
   <head>
     <title>Meal plan</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?q={{ 123234 }}" />
   </head>
   <body>
-    <div class="nav">
-      <a href="/">Main</a>
-      <a href="/users">Users</a>
-      <a href="/search">Search</a>
-      <a href="/calculateBMI">BMI</a>
-      <a href="/track">Track</a>
+    <div class="index_container">
+        <div class="nav">
+          <ul>
+            <li> <a href="/">Main</a> </li>
+            <li> <a href="/users">Users</a> </li>
+            <li> <a href="/search">Search</a> </li>
+            <li> <a href="/track">Track</a> </li>
+            <li> <a href="/calculateBMI">BMI</a> </li>
+          </ul>
+        </div>
+    <div >
+    <h1 class="home_title"> Welcome to meal plan </h1>
+    <p> is this even working?</p>
+    <h1> Checking this again </h1>
     </div>
-    <h1>This is index page</h1>
-    <p>Welcome to meal plan</p>
+    
 
 
-
+    </div>
   </body>

@@ -1,15 +1,64 @@
-body {
-    background-color: rgb(120, 150, 120);
+/* body {
+    background-color: #d3d3d3;
     width: 70%;
     margin: auto;
     margin-top: 0;
-    color: aliceblue;
+    align-items: center;
+} */
+body{ 
+ margin: 0px;
+ width: 100%;
+ height: 100%;
+ background-color: #d3d3d3;
+font-family: 'Oxygen', sans-serif;
+box-sizing: border-box;
+}
+
+
+
+.bmi_title{
+    margin: 30px;
+    color: aquamarine;
+    font-family: 'Oxygen', sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+.nav{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 1.5rem;
+    padding: 25px;
+}
+
+.nav li{
+list-style-type: none;
+}
+
+.nav a{
+text-decoration: none;
+color: black;
+}
+
+a:hover{
+    color: dimgrey;
+}
+
+input[type=text], select, textarea {
+  /* width: 50%; */
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  /* margin-top: 6px;
+  margin-bottom: 16px; */
+  resize: vertical;
+}
+
+.users_form{
     align-items: center;
 }
 
-h1{
-color: green;
-}
 
 table {
     align-items: center;
@@ -18,4 +67,23 @@ table {
 td, th {
 text-align: center;
 padding: 8px;
+font-family: 'Oxygen', sans-serif;
+}
+
+#user_title h1{
+    align-items: center;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.home_title{
+    display: flex;
+    justify-content: center;
+    font-family: 'Oxygen', sans-serif;
+    font-size: 50px;
+    color:lightseagreen
+}
+
+.bmi_form{
+    display: flex;
+    justify-content: center;
 }
