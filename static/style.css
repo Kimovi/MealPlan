@@ -1,10 +1,3 @@
-/* body {
-    background-color: #d3d3d3;
-    width: 70%;
-    margin: auto;
-    margin-top: 0;
-    align-items: center;
-} */
 body{ 
  margin: 0px;
  width: 100%;
@@ -14,17 +7,30 @@ font-family: 'Oxygen', sans-serif;
 box-sizing: border-box;
 }
 
-
-
-.bmi_title{
-    margin: 30px;
-    color: aquamarine;
-    font-family: 'Oxygen', sans-serif;
+.form1 {
+    width: 100%;
+    margin: 0px;
     display: flex;
     justify-content: center;
 }
 
-.nav{
+
+.bmi_title{
+    margin: 30px;
+    color: black;
+    font-family: 'Oxygen', sans-serif;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.w_h_input, .bmi_form{
+    font-family: 'Oxygen', sans-serif;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.nav ul{
     display: flex;
     justify-content: space-evenly;
     font-size: 1.5rem;
@@ -70,9 +76,24 @@ padding: 8px;
 font-family: 'Oxygen', sans-serif;
 }
 
-#user_title h1{
-    align-items: center;
+.user_title {
+    display: flex;
+    justify-content: center;
     font-family: 'Oxygen', sans-serif;
+}
+
+#user_title_message{
+    color: red;
+    font-style: italic;
+}
+
+/* .user_db{
+    display: none;
+} */
+
+.user_db{
+    display: flex;
+    justify-content: center;
 }
 
 .home_title{
@@ -80,10 +101,69 @@ font-family: 'Oxygen', sans-serif;
     justify-content: center;
     font-family: 'Oxygen', sans-serif;
     font-size: 50px;
-    color:lightseagreen
+    color: black;
+    font-weight: bold;
 }
 
-.bmi_form{
+#search_title, .meal_keyword, .track_info{
+    display: flex;
+    justify-content: center;
+}
+
+#food_search{
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+}
+
+.user_name, .search_keyword {
+padding: 16px;
+}
+/* #track{
+    pad;
+} */
+
+
+.meal_output{
+    color: black;
+    margin: auto;
+    text-align: center;
+}
+
+.BMI_outcome{
+    text-align: center;
+}
+.BMI_outcome p{
+    font-weight: bold;
+    font-size: 20px;
+    padding: 50px;
+}
+
+.content_description{
+ padding:70px;
+}
+
+.index_list{
+    font-size: 20px;
+    font-weight: bold;
+    
+}
+
+#instructions{
+border: red;
+}
+
+#get_started{
+    display: flex;
+    justify-content: center;
+}
+#get_started a{
+    text-decoration: none;
+}
+
+footer{
+    padding: 0px;
+    margin: 0px;
     display: flex;
     justify-content: center;
 }
