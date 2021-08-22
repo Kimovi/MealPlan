@@ -1,5 +1,5 @@
 import unittest
-from app import app, db, Users, Food, calculate_bmi
+from MealPlan.app import app, db, Users, Food, calculate_bmi
 from flask_testing import TestCase
 from flask import url_for
 
